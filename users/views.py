@@ -140,7 +140,7 @@ class CreatePaymentView(LoginRequiredMixin, DetailView):
                 session_id=session.id,
                 status='pending'
             )
-
+            _ = payment
             return redirect(session.url)
 
         except stripe.error.StripeError:

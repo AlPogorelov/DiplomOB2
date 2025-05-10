@@ -102,6 +102,7 @@ class PaymentViewsTest(TestCase):
             reverse('users:payment_success', args=[self.content.id]),
             {'session_id': 'test_session'}
         )
+        self.assertEqual(response.status_code, 302)
         payment.refresh_from_db()
         self.assertEqual(payment.status, 'paid')
 
