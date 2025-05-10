@@ -1,5 +1,5 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy
 
@@ -200,11 +200,12 @@ class FreeContentList(ListView):
         ).order_by('-created_at')
 
 
-class CategoryCreateView(LoginRequiredMixin, CreateView):
+class CategoryCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Category
     template_name = 'content/category_form.html'
     form_class = CategoryForm
     success_url = reverse_lazy('content:categories_list')
+    permission_required = 'content.add_category'
 
 
 class CategoryListView(ListView):
@@ -219,19 +220,21 @@ class CategoryListView(ListView):
         ).order_by('name')
 
 
-class CategoryUpdateView(LoginRequiredMixin, UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Category
     template_name = 'content/category_form.html'
     form_class = CategoryForm
     success_url = reverse_lazy('content/categories_list.html')
     pk_url_kwarg = 'category_pk'
+    permission_required = 'content.change_category'
 
 
-class CategoryDeleteView(LoginRequiredMixin, DeleteView):
+class CategoryDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Category
     template_name = 'content/category_delete.html'
     success_url = reverse_lazy('content:categories_list')
     pk_url_kwarg = 'category_pk'
+    permission_required = 'content.delete_category'
 
 
 class CategoryDetailView(LoginRequiredMixin, DetailView):
