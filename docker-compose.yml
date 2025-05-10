@@ -39,23 +39,9 @@ services:
       retries: 5
 
 
-  redis:
-    image: redis
-    expose:
-      - "6379"
-    healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
-      interval: 5s
-      timeout: 3s
-      retries: 3
-    volumes:
-      - redis_data:/data
-
-
 networks:
   default:
 
 volumes:
   postgres_data:
   static_volume:
-  redis_data:
