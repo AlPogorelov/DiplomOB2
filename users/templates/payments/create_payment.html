@@ -1,0 +1,17 @@
+{% extends "content/home.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-body text-center">
+            <h2>Оформление подписки</h2>
+            <p>Доступ к статье "{{ object.title }}"</p>
+            <p class="h4">{{ object.sub_price }} ₽</p>
+            <div class="mt-4" id="payment-form">
+                <!-- Stripe Elements будет здесь -->
+            </div>
+            <p class="text-muted mt-3">Перенаправление на платежный шлюз...</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

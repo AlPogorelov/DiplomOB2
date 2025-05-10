@@ -1,0 +1,19 @@
+{% extends 'content/home.html'%}
+{% block content %}
+<div class="row g-5">
+    <div class="col-md-8">
+        {% for content in contents %}
+      <article class="content-item">
+        <!-- Заголовок статьи -->
+        <h2 class="content-title">{{ content.title }}</h2>
+
+        <!-- Основной текст -->
+        <div class="content-body">
+            {{ content.body|safe }}
+        </div>
+      </article>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

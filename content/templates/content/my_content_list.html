@@ -1,0 +1,46 @@
+{% extends 'content/home.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>
+        {% if request.path == '/articles/my/' %}
+            Мои статьи
+        {% else %}
+            Бесплатные статьи
+        {% endif %}
+    </h2>
+    
+    <div class="row">
+        {% for content in contents %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ content.title }}</h5>
+                    <p class="card-text">{{ content.body_text|truncatechars:100 }}</p>
+                    <a href="{% url 'content:content_detail' content.pk %}" 
+                       class="btn btn-primary">
+                        Читать
+                    </a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'content:content_update' content.pk %}"
+                       class="btn btn-primary">
+                        Редактировать
+                    </a>
+                    <a href="{% url 'content:content_delete' content.pk %}"
+                       class="btn btn-primary">
+                        Удалить
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Статей не найдено
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

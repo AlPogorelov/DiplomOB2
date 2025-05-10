@@ -1,0 +1,52 @@
+{% extends 'content/home.html'%}
+{% block content %}
+<!--<div class="container">-->
+<!--    <div class="row">-->
+<!--        <div class="col-6">-->
+<!--            <form class="row" method="post" enctype="multipart/form-data">-->
+<!--                <div class="card">-->
+<!--                    <div class="card-body">-->
+<!--                        {% csrf_token %}-->
+<!--                        {{ form.as_p }}-->
+<!--                    </div>-->
+<!--                    <button type="submit" class="btn btn-primary">-->
+<!--                        Войти-->
+<!--                    </button>-->
+<!--                    <button type="submit" class="btn btn-primary" >-->
+<!--                        Зарегистрироваться-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<div class="container">
+    <div class="row justify-content-center">  <!-- Добавлен justify-content-center -->
+        <div class="col-12 col-md-6">  <!-- Изменены классы для адаптивности -->
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Вход в систему</h3>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+
+                        <div class="d-grid gap-2">  <!-- Кнопка на всю ширину -->
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                Войти
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Блок регистрации -->
+                    <div class="mt-4 text-center">
+                        <p class="mb-2">Ещё нет аккаунта?</p>
+                        <a href="{% url 'users:register' %}" class="btn btn-outline-success">
+                            Зарегистрироваться
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
