@@ -11,6 +11,17 @@
         <div class="content-body">
             {{ content.body|safe }}
         </div>
+          {% if user.is_authenticated and user == content.owner %}
+                    <a href="{% url 'content:content_update' content.pk %}"
+                       class="btn btn-primary">
+                        Редактировать
+                    </a>
+
+                    <a href="{% url 'content:content_delete' content.pk %}"
+                       class="btn btn-primary">
+                        Удалить
+                    </a>
+                    {% endif %}
       </article>
         {% endfor %}
     </div>
