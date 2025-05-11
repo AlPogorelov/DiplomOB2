@@ -119,7 +119,7 @@ class ContentDetailView(DetailView):
         if content.is_paid:
             if user.is_authenticated:
                 # Исправьте название URL
-                return redirect('user:create_payment', pk=content.pk)
+                return redirect('users:create_payment', pk=content.pk)
             else:
                 return redirect(f"{login_url}?next={next_url}")
         return redirect('content:home')
