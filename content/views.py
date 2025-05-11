@@ -64,7 +64,7 @@ class ContentListView(ListView):
         return context
 
 
-class ContentDetailView(LoginRequiredMixin, DetailView):
+class ContentDetailView(DetailView):
     model = Content
     template_name = 'content/content_detail.html'
     context_object_name = 'content'
