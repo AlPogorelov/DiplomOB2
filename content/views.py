@@ -2,7 +2,6 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse_lazy, reverse
-from urllib.parse import urlencode
 from users.models import Subscription
 from .forms import ContentForm, CategoryForm
 from .models import Content, Category, Media
@@ -112,22 +111,16 @@ class ContentDetailView(DetailView):
         return False
 
     def handle_no_access(self):
-        current_path = self.request.path
-        payment_url = reverse('users:create_payment', kwargs={'pk': self.object.pk})
-
-        # Если уже на странице оплаты, не редиректим, показываем ошибку или что-то еще
-        if current_path == payment_url:
-            return self.render_to_response({'error': 'Доступ запрещен'})  # или другой ответ
-
-        # Иначе, делаем обычный редирект
         content = self.object
         user = self.request.user
+        login_url = reverse('users:login')
+        next_url = self.request.get_full_path()
+
         if content.is_paid:
             if user.is_authenticated:
-                return redirect(payment_url)
+                # Исправьте название URL
+                return redirect('create_payment', pk=content.pk)
             else:
-                login_url = reverse('users:login')
-                next_url = self.request.get_full_path()
                 return redirect(f"{login_url}?next={next_url}")
         return redirect('content:home')
 
