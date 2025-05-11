@@ -79,6 +79,7 @@ class ContentDetailView(LoginRequiredMixin, DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
 
+
         # Проверка доступа
         if not self.has_access():
             return self.handle_no_access()
@@ -93,21 +94,16 @@ class ContentDetailView(LoginRequiredMixin, DetailView):
     def has_access(self):
         user = self.request.user
         content = self.object
-
-        # Автор всегда имеет доступ
         if user == content.owner:
             return True
-
-        # Если контент бесплатный — доступ есть
-        if not content.is_paid:
+        elif not content.is_paid:
             return True
-
-        # Для платного контента — проверка подписки
-        return Subscription.objects.filter(
-            user=user,
-            content=content,
-            is_active=True
-        ).exists()
+        else:
+            return Subscription.objects.filter(
+                user=user,
+                content=content,
+                is_active=True
+            ).exists()
 
     def handle_no_access(self):
         content = self.object
