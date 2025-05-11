@@ -74,6 +74,7 @@ class Content(models.Model):
         """Проверяет, является ли контент платным"""
         return self.sub_price > 0
 
+
 class Media(models.Model):
     content = models.ForeignKey(
         Content,
