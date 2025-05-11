@@ -1,8 +1,8 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect, get_object_or_404, render
-from django.urls import reverse_lazy
-
+from django.urls import reverse_lazy, reverse
+from urllib.parse import urlencode
 from users.models import Subscription
 from .forms import ContentForm, CategoryForm
 from .models import Content, Category, Media
@@ -114,14 +114,15 @@ class ContentDetailView(DetailView):
     def handle_no_access(self):
         content = self.object
         user = self.request.user
+        login_url = reverse('users:login')
+        next_url = self.request.get_full_path()
+        redirect_url = f"{login_url}?{urlencode({'next': next_url})}"
 
-        # Для платного контента — перенаправляем на оплату или логин
         if content.is_paid:
             if user.is_authenticated:
                 return redirect('users:create_payment', pk=content.pk)
             else:
-                return redirect('users:login')
-        # Для бесплатного контента — показываем главную или другую страницу
+                return redirect(redirect_url)
         return redirect('content:home')
 
 
