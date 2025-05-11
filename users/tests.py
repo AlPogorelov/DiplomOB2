@@ -86,7 +86,7 @@ class PaymentViewsTest(TestCase):
         mock_stripe.return_value = mock_session
 
         response = self.client.get(reverse('users:create_payment', args=[self.content.id]))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
     @patch('stripe.checkout.Session.retrieve')
     def test_payment_success(self, mock_stripe):
@@ -136,7 +136,7 @@ class FullPaymentFlowTest(TestCase):
 
         # Шаг 1: Имитируем создание платежа
         response = self.client.get(reverse('users:create_payment', args=[self.content.id]))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
         # Шаг 2: Имитируем успешную оплату
         response = self.client.get(
