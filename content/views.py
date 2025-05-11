@@ -79,7 +79,6 @@ class ContentDetailView(LoginRequiredMixin, DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
 
-
         # Проверка доступа
         if not self.has_access():
             return self.handle_no_access()
