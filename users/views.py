@@ -2,7 +2,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 import stripe
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
+from django.http import JsonResponse
 from config import settings
 from content.models import Content
 from django.views.generic import CreateView, TemplateView, DetailView, UpdateView, View, ListView
@@ -140,8 +140,16 @@ class CreatePaymentView(LoginRequiredMixin, DetailView):
                 session_id=session.id,
                 status='pending'
             )
-            _ = payment
-            return redirect(session.url)
+
+            # Рендерим страницу с проверкой статуса
+            return render(request, 'payments/payment_check.html', {
+                'payment_id': payment.id,
+                'session_id': session.id,
+                'success_url': request.build_absolute_uri(
+                    reverse('users:payment_success', kwargs={'pk': content.pk})
+                ),
+                'object': content,
+            })
 
         except stripe.error.StripeError:
             messages.error(request, 'Ошибка при создании платежа')
@@ -215,3 +223,11 @@ class PaymentSuccessView(LoginRequiredMixin, View):
             # Общая ошибка
             messages.error(request, "Ошибка обработки платежа")
             return redirect("content:home")
+
+
+def check_payment_status(request, payment_id):
+    try:
+        payment = Payment.objects.get(id=payment_id)
+        return JsonResponse({'status': payment.status})
+    except Payment.DoesNotExist:
+        return JsonResponse({'status': 'not_found'}, status=404)

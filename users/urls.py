@@ -20,6 +20,7 @@ urlpatterns = [
     path('logout/', custom_logout, name='logout'),
     path('profile/', profile_view, name='profile'),
     path('profile/edit/', ProfileUpdateView.as_view(), name='edit_profile'),
-    path('subscriptions/', UserSubscriptionsList.as_view(), name='subscriptions')
+    path('subscriptions/', UserSubscriptionsList.as_view(), name='subscriptions'),
+    path('check_payment_status/<int:payment_id>/', views.check_payment_status, name='check_payment_status'),
 
 ]
