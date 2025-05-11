@@ -20,7 +20,7 @@
         <ul class="dropdown-menu">
           {% if user.is_authenticated %}
           <li><a class="dropdown-item" href="{% url 'users:profile' %}"> Профиль</a></li>
-          <li><a class="dropdown-item" href="#"> Подписки</a></li>
+          <li><a class="dropdown-item" href="{% url 'users:subscriptions' %}"> Подписки</a></li>
           <li><a class="dropdown-item" href="{% url 'content:my_content' %}"> Мои статьи</a></li>
             {% if user.is_authenticated and user.is_staff %}
             <li><a class="dropdown-item" href="{% url 'content:categories_list' %}"> Настройки категории контента </a></li>

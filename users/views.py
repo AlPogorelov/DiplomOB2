@@ -5,7 +5,7 @@ from django.contrib import messages
 
 from config import settings
 from content.models import Content
-from django.views.generic import CreateView, TemplateView, DetailView, UpdateView, View
+from django.views.generic import CreateView, TemplateView, DetailView, UpdateView, View, ListView
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login, logout
 from .models import User, Subscription, Payment
@@ -146,6 +146,16 @@ class CreatePaymentView(LoginRequiredMixin, DetailView):
         except stripe.error.StripeError:
             messages.error(request, 'Ошибка при создании платежа')
             return redirect(content)
+
+
+class UserSubscriptionsList(LoginRequiredMixin, ListView):
+    model = Subscription
+    template_name = 'subscription/subscription_list.html'
+    context_object_name = 'subscriptions'
+
+    def get_queryset(self):
+        # получаем только активные подписки текущего пользователя
+        return Subscription.objects.filter(user=self.request.user, is_active=True).select_related('content')
 
 
 class PaymentSuccessView(LoginRequiredMixin, View):

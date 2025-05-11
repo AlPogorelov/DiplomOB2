@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import CustomLoginView, UserRegistrationView, CreatePaymentView, \
     PaymentSuccessView, custom_logout, profile_view, \
-    ProfileUpdateView, PhoneTokenObtainPairView
+    ProfileUpdateView, PhoneTokenObtainPairView, UserSubscriptionsList
 
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 from .apps import UsersConfig
@@ -19,6 +19,7 @@ urlpatterns = [
     path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', custom_logout, name='logout'),
     path('profile/', profile_view, name='profile'),
-    path('profile/edit/', ProfileUpdateView.as_view(), name='edit_profile')
+    path('profile/edit/', ProfileUpdateView.as_view(), name='edit_profile'),
+    path('subscriptions/', UserSubscriptionsList.as_view(), name='subscriptions')
 
 ]
