@@ -1,4 +1,6 @@
 from django.urls import path
+
+from . import views
 from .views import CustomLoginView, UserRegistrationView, CreatePaymentView, \
     PaymentSuccessView, custom_logout, profile_view, \
     ProfileUpdateView, PhoneTokenObtainPairView, UserSubscriptionsList
