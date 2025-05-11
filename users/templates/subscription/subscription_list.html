@@ -1,0 +1,21 @@
+{% extends 'content/home.html'%}
+{% block content %}
+<h1>Мои подписки</h1>
+
+{% if subscriptions %}
+    <ul>
+    {% for subscription in subscriptions %}
+        <li>
+            <a href="{{ subscription.content.get_absolute_url }}">
+                {{ subscription.content.title }}
+            </a>
+            <br>
+            Подписка от: {{ subscription.created_at|date:"d M Y" }}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>У вас нет активных подписок.</p>
+{% endif %}
+
+{% endblock %}
