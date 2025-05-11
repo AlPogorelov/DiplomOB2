@@ -61,11 +61,6 @@ class Content(models.Model):
     def __str__(self):
         return self.title
 
-    @property
-    def is_paid(self):
-        """Проверяет, является ли контент платным"""
-        return self.sub_price > 0
-
     def get_absolute_url(self):
         return reverse('content:content_detail', kwargs={'pk': self.pk})
 
@@ -74,6 +69,10 @@ class Content(models.Model):
         verbose_name_plural = 'Контент'
         ordering = ['-created_at', 'category', 'owner']
 
+    @property
+    def is_paid(self):
+        """Проверяет, является ли контент платным"""
+        return self.sub_price > 0
 
 class Media(models.Model):
     content = models.ForeignKey(
