@@ -112,17 +112,23 @@ class ContentDetailView(DetailView):
         return False
 
     def handle_no_access(self):
+        current_path = self.request.path
+        payment_url = reverse('users:create_payment', kwargs={'pk': self.object.pk})
+
+        # Если уже на странице оплаты, не редиректим, показываем ошибку или что-то еще
+        if current_path == payment_url:
+            return self.render_to_response({'error': 'Доступ запрещен'})  # или другой ответ
+
+        # Иначе, делаем обычный редирект
         content = self.object
         user = self.request.user
-        login_url = reverse('users:login')
-        next_url = self.request.get_full_path()
-        redirect_url = f"{login_url}?{urlencode({'next': next_url})}"
-
         if content.is_paid:
             if user.is_authenticated:
-                return redirect('users:create_payment', pk=content.pk)
+                return redirect(payment_url)
             else:
-                return redirect(redirect_url)
+                login_url = reverse('users:login')
+                next_url = self.request.get_full_path()
+                return redirect(f"{login_url}?next={next_url}")
         return redirect('content:home')
 
 
