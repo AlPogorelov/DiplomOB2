@@ -93,21 +93,35 @@ class ContentDetailView(LoginRequiredMixin, DetailView):
     def has_access(self):
         user = self.request.user
         content = self.object
-        if user == content.owner:
+
+        # Бесплатный контент — доступ всем, даже незарегистрированным
+        if not content.is_paid:
             return True
-        elif not content.is_paid:
-            return True
-        else:
-            return Subscription.objects.filter(
+
+        # Для платного контента: автор или активный подписчик
+        if user.is_authenticated:
+            if user == content.owner:
+                return True
+            elif Subscription.objects.filter(
                 user=user,
                 content=content,
                 is_active=True
-            ).exists()
+            ).exists():
+                return True
+        # Если пользователь не авторизован или не прошел проверку — доступ запрещен
+        return False
 
     def handle_no_access(self):
         content = self.object
+        user = self.request.user
+
+        # Для платного контента — перенаправляем на оплату или логин
         if content.is_paid:
-            return redirect('users:create_payment', pk=content.pk)
+            if user.is_authenticated:
+                return redirect('users:create_payment', pk=content.pk)
+            else:
+                return redirect('users:login')
+        # Для бесплатного контента — показываем главную или другую страницу
         return redirect('content:home')
 
 
