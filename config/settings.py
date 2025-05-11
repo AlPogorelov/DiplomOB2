@@ -91,6 +91,11 @@ DATABASES = {
     }
 }
 
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://158.160.3.141',
+]
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
