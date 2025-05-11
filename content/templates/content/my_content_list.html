@@ -21,11 +21,12 @@
                        class="btn btn-primary">
                         Читать
                     </a>
-                    {% if user.is_authenticated %}
+                    {% if user.is_authenticated and user == content.owner %}
                     <a href="{% url 'content:content_update' content.pk %}"
                        class="btn btn-primary">
                         Редактировать
                     </a>
+
                     <a href="{% url 'content:content_delete' content.pk %}"
                        class="btn btn-primary">
                         Удалить
