@@ -113,15 +113,16 @@ jobs:
           ssh -T -o StrictHostKeyChecking=no \
               -o UserKnownHostsFile=/dev/null \
               ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          docker compose down || True
           cd /var/www/DiplomOB2/
-          sudo git checkout feature/init-project
-          sudo git pull
+          git checkout feature/init-project
+          git pull
           if [ -d "static" ]; then
             echo "Static folder exists."
             else
             echo "Static folder does not exist. Creating it now."
             mkdir static
             fi
-          sudo docker compose down || True
-          sudo docker compose up -d --build
+          
+          docker compose up -d --build
           EOF
