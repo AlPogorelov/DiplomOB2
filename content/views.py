@@ -94,15 +94,17 @@ class ContentDetailView(LoginRequiredMixin, DetailView):
         user = self.request.user
         content = self.object
 
+        # Контент бесплатный или пользователь — автор
+        if not content.is_paid:
+            return True
         if user == content.owner:
             return True
-
+        # Проверяем активную подписку
         return Subscription.objects.filter(
             user=user,
-            content=content
+            content=content,
+            is_active=True
         ).exists()
-
-        return True
 
     def handle_no_access(self):
         content = self.object

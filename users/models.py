@@ -88,6 +88,7 @@ class Subscription(models.Model):
                                 related_name='content_subscriptions', verbose_name='Контент')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата подписки')
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, null=True, verbose_name='Платеж')
+    is_active = models.BooleanField(default=False, verbose_name='Активна')
 
     class Meta:
         unique_together = ('user', 'content')
