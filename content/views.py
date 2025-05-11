@@ -108,6 +108,7 @@ class ContentDetailView(LoginRequiredMixin, DetailView):
             content=content,
             is_active=True
         ).exists()
+
     def handle_no_access(self):
         content = self.object
         if content.is_paid:
