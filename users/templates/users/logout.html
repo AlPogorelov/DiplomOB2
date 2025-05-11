@@ -1,0 +1,18 @@
+{% extends 'content/home.html'%}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <form class="row" method="post" enctype="multipart/form-data">
+                <div class="card">
+                  <h2>Вы вышли из системы</h2>
+                    <div class="card-body">
+                        <p>Спасибо, что воспользовались нашим сайтом. Вы успешно вышли из системы.</p>
+                    </div>
+                    <a href="{% url 'login' %}">Войти снова</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "content/home.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-danger shadow-lg">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        Подтверждение удаления
+                    </h3>
+                </div>
+                
+                <div class="card-body">
+                    <h4 class="alert-heading">Вы уверены, что хотите удалить?</h4>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="d-grid gap-3 mt-4">
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                <i class="bi bi-trash-fill"></i>
+                                Да, удалить
+                            </button>
+                            <a href="{{ object.get_absolute_url }}" class="btn btn-outline-secondary btn-lg">
+                                <i class="bi bi-x-circle"></i>
+                                Отменить
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-width: 2px;
+    }
+    .alert-heading {
+        color: #dc3545;
+    }
+    .list-unstyled li {
+        padding: 5px 0;
+    }
+    .btn-lg {
+        padding: 0.8rem 1.5rem;
+        font-size: 1.1rem;
+    }
+</style>
+{% endblock %}

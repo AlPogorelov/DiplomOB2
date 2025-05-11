@@ -1,0 +1,35 @@
+{% extends 'content/home.html' %}
+
+{% block content %}
+
+<h1>Контент в категории: {{ category.name }}</h1>
+<ul>
+    {% for content in contents %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ content.title }}</h5>
+                    <p class="card-text">{{ content.body_text|truncatechars:100 }}</p>
+                    <a href="{% url 'content:content_detail' content.pk %}"
+                       class="btn btn-primary">
+                        Читать
+                    </a>
+                    {% if user.is_authenticated and user == content.owner %}
+                    <a href="{% url 'content:content_update' content.pk %}"
+                       class="btn btn-primary">
+                        Редактировать
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Статей не найдено
+            </div>
+        </div>
+        {% endfor %}
+</ul>
+
+{% endblock %}

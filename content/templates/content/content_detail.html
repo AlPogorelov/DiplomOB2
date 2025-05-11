@@ -1,0 +1,150 @@
+{% extends 'content/home.html'%}
+{% block content %}
+
+<div class="container py-5">
+    <div class="row">
+        <!-- Кнопка Назад -->
+        <div class="col-12 mb-4">
+            <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Назад
+            </a>
+        </div>
+
+        <!-- Основной контент -->
+        <div class="col-lg-8">
+            <article class="card shadow-sm">
+                <div class="card-body">
+                    <!-- Заголовок -->
+                    <h1 class="card-title display-4 mb-3">{{ content.title }}</h1>
+
+                    <!-- Мета-информация -->
+                    <div class="d-flex gap-3 text-muted mb-4">
+                        <div>
+                            <i class="bi bi-person"></i>
+                            <span>{{ content.owner.get_full_name|default:content.owner.username }}</span>
+                        </div>
+                        <div>
+                            <i class="bi bi-clock"></i>
+                            <time>{{ content.created_at|date:"d E Y, H:i" }}</time>
+                        </div>
+                    </div>
+
+                    <!-- Основной текст -->
+                    <div class="content-body fs-5 lh-base">
+                        {{ content.body_text|linebreaks }}
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <!-- Медиафайлы -->
+        <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="sticky-top" style="top: 20px;">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-images"></i> Медиаматериалы</h5>
+                    </div>
+
+                    <div class="card-body">
+                        {% if content.media_files.all %}
+                            <div class="row g-3">
+                                {% for media in content.media_files.all %}
+                                    <div class="col-12">
+                                        {% if media.file.name|lower|slice:'-4:' == '.jpg' or media.file.name|lower|slice:'-4:' == '.png' %}
+                                            <!-- Изображения -->
+                                            <div class="media-item position-relative">
+                                                <img src="{{ media.file.url }}"
+                                                     class="img-fluid rounded"
+                                                     alt="Медиа-контент"
+                                                     data-bs-toggle="modal"
+                                                     data-bs-target="#mediaModal{{ media.id }}">
+                                            </div>
+
+                                            <!-- Модальное окно для изображений -->
+                                            <div class="modal fade" id="mediaModal{{ media.id }}" tabindex="-1">
+                                                <div class="modal-dialog modal-dialog-centered modal-xl">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body text-center">
+                                                            <img src="{{ media.file.url }}"
+                                                                 class="img-fluid"
+                                                                 alt="Полный размер">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        {% elif media.file.name|lower|slice:'-4:' == '.mp4' %}
+                                            <!-- Видео -->
+                                            <div class="ratio ratio-16x9">
+                                                <video controls class="rounded">
+                                                    <source src="{{ media.file.url }}"
+                                                            type="video/mp4">
+                                                    Ваш браузер не поддерживает видео
+                                                </video>
+                                            </div>
+
+                                        {% else %}
+                                            <!-- Другие файлы -->
+                                            <div class="card file-card">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-file-earmark fs-1 me-3"></i>
+                                                        <div>
+                                                            <a href="{{ media.file.url }}"
+                                                               download
+                                                               class="text-decoration-none">
+                                                                Скачать файл
+                                                            </a>
+                                                            <div class="text-muted small">
+                                                                {{ media.file.name|slice:"-4:"|upper }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info mb-0">
+                                Нет прикрепленных медиафайлов
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .content-body {
+        font-family: 'Georgia', serif;
+        color: #2c3e50;
+    }
+
+    .media-item {
+        transition: transform 0.2s;
+        cursor: pointer;
+    }
+
+    .media-item:hover {
+        transform: scale(1.02);
+    }
+
+    .file-card {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+    }
+
+    .file-card:hover {
+        background-color: #e9ecef;
+    }
+
+    .modal-content {
+        background-color: rgba(0,0,0,0.8);
+        border: none;
+    }
+</style>
+{% endblock %}

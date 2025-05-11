@@ -1,0 +1,4 @@
+{% for category in categories %}
+      <a class="nav-item nav-link link-body-emphasis active"
+         href="{% url 'content:category_content' category_pk=category.pk %}"> {{ category.name }} </a>
+{% endfor %}

@@ -1,0 +1,12 @@
+{% extends 'content/home.html' %}
+
+{% block content %}
+<div class="edit-profile">
+    <h1>Редактирование профиля</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Сохранить</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'content/home.html'%}
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h4>Подтверждение удаления</h4>
+        </div>
+        <div class="card-body">
+            <p class="lead">Вы уверены, что хотите удалить категорию <strong>"{{ object.name }}"</strong>?</p>
+            <p class="text-muted">Все связанные материалы так же удалятся.</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-danger btn-lg">
+                        <i class="bi bi-trash"></i> Да, удалить
+                    </button>
+                    <a href="{% url 'content:categories_list' %}" class="btn btn-secondary btn-lg">
+                        <i class="bi bi-x-circle"></i> Отмена
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

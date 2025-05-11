@@ -1,0 +1,47 @@
+{% extends "content/home.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-body text-center">
+            <h2>Оформление подписки</h2>
+            <p>Доступ к статье "{{ object.title }}"</p>
+            <p class="h4">{{ object.sub_price }} ₽</p>
+            <div class="mt-4" id="payment-form">
+                <!-- Stripe Elements или платежная форма, если нужна -->
+            </div>
+            <p class="text-muted mt-3">Перенаправление на платежный шлюз...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const paymentId = '{{ payment_id }}'; // ID вашего платежа
+    const sessionId = '{{ session_id }}'; // stripe session ID
+    const successUrl = '{{ success_url }}'; // URL для редиректа при успехе
+
+    // Функция для проверки статуса
+    function checkStatus() {
+      fetch(`/check_payment_status/${paymentId}/`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'paid') {
+            window.location.href = successUrl;
+          } else {
+            alert('Платеж не подтвержден, попробуйте позже.');
+          }
+        })
+        .catch(() => {
+          alert('Ошибка при проверке статуса платежа.');
+        });
+    }
+
+    // Первичная проверка
+    checkStatus();
+
+    // Повторная проверка через 20 секунд
+    setTimeout(checkStatus, 20000);
+  });
+</script>
+{% endblock %}
