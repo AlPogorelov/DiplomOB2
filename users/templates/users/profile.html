@@ -1,0 +1,14 @@
+{% extends 'content/home.html'%}
+{% block content %}
+<div class="profile">
+    <h1>Профиль</h1>
+    <p>Email: {{ user.email }}</p>
+    <p>Телефон: {{ user.phone }}</p>
+    <p>Имя: {{ user.first_name|default:"Не указано" }}</p>
+    <p>Фамилия: {{ user.last_name|default:"Не указано" }}</p>
+    <p>Город: {{ user.city|default:"Не указан" }}</p>
+    <p>Дата рождения: {{ user.birth_date|date:"d.m.Y"|default:"Не указана" }}</p>
+    <p>О себе: {{ user.bio|default:"Не заполнено" }}</p>
+    <a href="{% url 'users:edit_profile' %}" class="btn">Редактировать</a>
+</div>
+{% endblock %}

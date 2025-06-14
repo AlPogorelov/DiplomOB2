@@ -1,0 +1,47 @@
+{% extends "content/home.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-body text-center">
+            <h2>Оформление подписки</h2>
+            <p>Доступ к статье "{{ object.title }}"</p>
+            <p class="h4">{{ object.sub_price }} ₽</p>
+            <div class="mt-4" id="payment-form">
+                <!-- Stripe Elements будет здесь -->
+            </div>
+            <p class="text-muted mt-3">Перенаправление на платежный шлюз...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Вставляем скрипт для проверки статуса через 20 секунд -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Предполагаю, что у вас есть переменная payment_id, переданная из контекста
+    const paymentId = '{{ payment_id }}'; // вставьте реальный идентификатор платежа
+    const successUrl = '{{ success_url }}'; // вставьте реальный URL для редиректа при успехе
+
+    // Отправляем запрос на проверку статуса платежа
+    fetch(`/check_payment_status/${paymentId}/`)
+      .then(response => response.json())
+      .then(data => {
+        // Ждем 20 секунд
+        setTimeout(() => {
+          // После задержки делаем повторный запрос
+          fetch(`/check_payment_status/${paymentId}/`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.status === 'paid') {
+                // Платеж подтвержден, перенаправляем
+                window.location.href = successUrl;
+              } else {
+                alert('Платеж не подтвержден, попробуйте позже.');
+                // Можно добавить повторный вызов или другую логику
+              }
+            });
+        }, 20000); // 20 секунд
+      });
+  });
+</script>
+{% endblock %}
